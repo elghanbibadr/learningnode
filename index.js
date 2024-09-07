@@ -24,6 +24,7 @@ const courseSchema=new mongoose.Schema({
     tags:[String],
     date:{type:Date, default: Date.now()},
     isPublished:Boolean,
+    price:Number
     
 })
 
@@ -33,22 +34,24 @@ const Course=mongoose.model('Course',courseSchema);
 
 
 
-async function createCourse(params) {
-  const course=new Course({
-    name:'angular',
-    author:"mosh",
-    tags: ["front end"],
-    isPublished:true
+// async function createCourse(params) {
+//   const course=new Course({
+//     name:'angular',
+//     author:"mosh",
+//     tags: ["front end"],
+//     isPublished:true
   
-  })
-  const result=await course.save()
-  console.log("result",result)
-} 
+//   })
+//   const result=await course.save()
+//   console.log("result",result)
+// } 
 
 
 
 async function getCourses(){
- const courses=await Course.find().or([{author:"mos"},{isPublished:"true"}])
+ const courses=await Course.find({isPublished:true, tags:"backend"})
+ .sort({name:1})
+ .select("name author")
  console.log("courses",courses)
 }
 
