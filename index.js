@@ -35,7 +35,7 @@ const Course=mongoose.model('Course',courseSchema);
 
 async function createCourse(params) {
   const course=new Course({
-    name:'angular ',
+    name:'angular',
     author:"mosh",
     tags: ["front end"],
     isPublished:true
@@ -47,8 +47,13 @@ async function createCourse(params) {
 
 
 
-createCourse()
+async function getCourses(){
+ const courses=await Course.find({name:'angular'})
+ console.log("courses",courses)
+}
 
+
+getCourses()
 app.get('/',(req,res) => {
    return  ('hello world') ;
    const students=m
