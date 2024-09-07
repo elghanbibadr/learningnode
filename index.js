@@ -49,18 +49,39 @@ const Course=mongoose.model('Course',courseSchema);
 
 
 async function getCourses(){
- const courses=await Course.find({isPublished:true, tags:{$in:["backend","frontend"]}})
- .sort({price:-1})
- .select("name price")
- console.log("courses",courses)
+ const courses=await Course.find()
+//  .sort({price:-1})
+//  .select("name price")
+//  console.log("courses",courses)
+ return courses
 }
 
 
-getCourses()
-app.get('/',(req,res) => {
-   return  ('hello world') ;
-   const students=m
+async function updateCourse(id){
+  const course=await Course.findById("5a68fdc3615eda645bc6bdec")
+  console.log("finded course",course)
+  if(!course)return
+  course.set({isPublished:true,author:'another author'});
+  const result= await course.save()
+  console.log("updated course",result)
+}
+
+
+// updateCourse()
+
+// GET 
+app.get('/',async (req,res) => {
+  try{
+
+    const courses = await getCourses(); // Assuming getCourses returns the courses immediately
+    res.json(courses);  // Send the courses as JSON
+  }catch(e){
+    res.status(500).send("An error occurred",e);  }
 })
+
+
+// DELETE
+
 
 app.listen('3000',()=>{
     console.log('app listening on port 3000')
