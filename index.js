@@ -48,7 +48,7 @@ async function createCourse(params) {
 
 
 async function getCourses(){
- const courses=await Course.find({name:'angular'})
+ const courses=await Course.find().or([{author:"mos"},{isPublished:"true"}])
  console.log("courses",courses)
 }
 
