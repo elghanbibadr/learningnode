@@ -2,6 +2,7 @@ const express=require('express');
 const mongoose=require('mongoose')
 const app=express()
 
+app.use(express.json()); 
 
 const mongoURI = 'mongodb://localhost:27017/playground'; // Use your MongoDB URI
 
@@ -88,6 +89,35 @@ app.delete('/:id',async (req,res) =>{
   // delete the course
   const result=await Course.deleteOne({_id:id})
  return res.json(result)
+})
+
+
+// ADD NEW COURSE
+
+app.post("/",async (req,res)=>{
+  try{
+    // const body=req.body
+    const { name, author, tags, isPublished, price } = req.body;
+
+    const newCourse = new Course({
+     _id:"sjdha3366",
+      ...req.body
+    });
+ 
+
+    const result=await newCourse.save()
+
+
+    console.log("new course",result)
+    //  await newCourse.save();
+
+    // console.log("course saved:", savedCourse); // 
+    return res.json("course saved")
+
+  }catch(e){
+    console.log("error saving",e.message)
+    return res.json({error:e.message})
+  }
 })
 
 app.listen('3000',()=>{
