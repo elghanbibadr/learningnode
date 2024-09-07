@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const app=express()
 
 
-const mongoURI = 'mongodb://localhost:27017/school'; // Use your MongoDB URI
+const mongoURI = 'mongodb://localhost:27017/playground'; // Use your MongoDB URI
 
 const connectDB = async () => {
     try {
@@ -31,13 +31,23 @@ const courseSchema=new mongoose.Schema({
 // CREATE A CLASS MODAL FROM THAT SCHEMA
 const Course=mongoose.model('Course',courseSchema);
 
-const course=new Course({
-  name:'node js',
-  author:"mosh",
-  tags: ["node","mongodb"],
-  isPublished:true
 
-})
+
+async function createCourse(params) {
+  const course=new Course({
+    name:'angular ',
+    author:"mosh",
+    tags: ["front end"],
+    isPublished:true
+  
+  })
+  const result=await course.save()
+  console.log("result",result)
+} 
+
+
+
+createCourse()
 
 app.get('/',(req,res) => {
    return  ('hello world') ;
