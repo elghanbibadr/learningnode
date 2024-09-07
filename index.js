@@ -16,8 +16,32 @@ const connectDB = async () => {
   };
 connectDB()  
 
+
+// CREATE A SHCEMA THAT DEFINES THE SHAP OF ALL COURSES
+const courseSchema=new mongoose.Schema({
+    name:String,
+    author:String,
+    tags:[String],
+    date:{type:Date, default: Date.now()},
+    isPublished:Boolean,
+    
+})
+
+
+// CREATE A CLASS MODAL FROM THAT SCHEMA
+const Course=mongoose.model('Course',courseSchema);
+
+const course=new Course({
+  name:'node js',
+  author:"mosh",
+  tags: ["node","mongodb"],
+  isPublished:true
+
+})
+
 app.get('/',(req,res) => {
    return  ('hello world') ;
+   const students=m
 })
 
 app.listen('3000',()=>{
