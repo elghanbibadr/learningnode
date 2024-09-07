@@ -49,9 +49,9 @@ const Course=mongoose.model('Course',courseSchema);
 
 
 async function getCourses(){
- const courses=await Course.find({isPublished:true, tags:"backend"})
- .sort({name:1})
- .select("name author")
+ const courses=await Course.find({isPublished:true, tags:{$in:["backend","frontend"]}})
+ .sort({price:-1})
+ .select("name price")
  console.log("courses",courses)
 }
 
