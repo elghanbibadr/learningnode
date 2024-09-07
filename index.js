@@ -19,6 +19,7 @@ connectDB()
 
 // CREATE A SHCEMA THAT DEFINES THE SHAP OF ALL COURSES
 const courseSchema=new mongoose.Schema({
+    _id: String,
     name:String,
     author:String,
     tags:[String],
@@ -48,13 +49,6 @@ const Course=mongoose.model('Course',courseSchema);
 
 
 
-async function getCourses(){
- const courses=await Course.find()
-//  .sort({price:-1})
-//  .select("name price")
-//  console.log("courses",courses)
- return courses
-}
 
 
 async function updateCourse(id){
@@ -72,9 +66,9 @@ async function updateCourse(id){
 // GET 
 app.get('/',async (req,res) => {
   try{
-
-    const courses = await getCourses(); // Assuming getCourses returns the courses immediately
-    res.json(courses);  // Send the courses as JSON
+   
+    const courses=await Course.find();
+     res.json(courses);  // Send the courses as JSON
   }catch(e){
     res.status(500).send("An error occurred",e);  }
 })
@@ -82,6 +76,19 @@ app.get('/',async (req,res) => {
 
 // DELETE
 
+
+app.delete('/:id',async (req,res) =>{
+  const {id}=req.params
+  if(!id)return res.json("id not found").status(404)
+    
+    // GET THE COURSE FROM THE DB
+  const course=await Course.findById(id)
+  if(!course)return res.json("no course with the given id found").status(503)
+  
+  // delete the course
+  const result=await Course.deleteOne({_id:id})
+ return res.json(result)
+})
 
 app.listen('3000',()=>{
     console.log('app listening on port 3000')
