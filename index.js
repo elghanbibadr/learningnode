@@ -17,15 +17,34 @@ const connectDB = async () => {
   };
 connectDB()  
 
+function generateRandomId() {
+  // Create a random 24-character string
+  return (Math.random().toString(16).substring(2) + Math.random().toString(16).substring(2)).substring(0, 24);
+}
+
 
 // CREATE A SHCEMA THAT DEFINES THE SHAP OF ALL COURSES
 const courseSchema=new mongoose.Schema({
     _id: String,
-    name:String,
+    name:{ type:String , required:true},
     author:String,
-    tags:[String],
+    tags:{
+      type:Array,
+      validate:{
+        validator:function(v){
+          return v.length > 0 ;
+        },
+        message:"course should have at least one tag"
+
+      }
+    },
     date:{type:Date, default: Date.now()},
     isPublished:Boolean,
+    category:{
+      type:String,
+      required:true,
+      enum:["web","mobile","network"]
+    },
     price:Number
     
 })
@@ -97,14 +116,14 @@ app.delete('/:id',async (req,res) =>{
 app.post("/",async (req,res)=>{
   try{
     // const body=req.body
-    const { name, author, tags, isPublished, price } = req.body;
+    const { name, author, tags, isPublished, price,category } = req.body;
 
     const newCourse = new Course({
-     _id:"sjdha3366",
+     _id:generateRandomId(),
       ...req.body
     });
  
-
+  //  await newCourse.validate()
     const result=await newCourse.save()
 
 
