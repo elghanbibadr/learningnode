@@ -119,6 +119,23 @@ app.delete('/:id',async(req,res) => {
   }
 })
 
+
+
+// update a genres
+app.put('/:id',async (req,res) => {
+  const id=req.params.id
+  try{
+    console.log('name',req.body.name)
+    const genre=await Genres.findByIdAndUpdate(id,{
+    name:req.body.name
+    })
+    if(!genre)return res.send("no genres found with this id")
+    res.send('genre updated')
+  }catch(e){
+    res.send({error:e.message})
+  }
+})
+
 // listening for changes
 
 app.listen('3000',()=>{
