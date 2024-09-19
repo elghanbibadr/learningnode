@@ -2,6 +2,9 @@ const express=require('express');
 const mongoose=require('mongoose')
 const app=express()
 const router=express.Router();
+// Middleware to parse JSON bodies
+app.use(express.json());
+
 
 function generateRandomId() {
     // Create a random 24-character string
@@ -28,7 +31,7 @@ const connectDB = async () => {
 
 
 const genreSchema=new mongoose.Schema({
-    name:{type:String,required:true}
+    name:{type:String,required:true ,minlength:5}
 })
 
 // CLASS MODULE
@@ -36,7 +39,6 @@ const Genres=mongoose.model("Genres",genreSchema)
 
 async function createGenre(){
     const genre=new Genres({
-        id:generateRandomId(),
         name:"action"
     })
     try{
@@ -79,6 +81,43 @@ app.get('/:id',async (req,res) => {
   
 })
 
+
+
+//POSTING A NEW GENRES
+
+app.post('/',async (req,res) => {
+  // req.body
+  const {name}=req.body
+  const newGenre=new Genres({
+    name
+  })
+   
+  try{
+    await newGenre.save()
+    res.send('genre saved')
+  }catch(e){
+   res.send({error:e.message})
+  }
+
+})
+
+
+// deleting a genres
+
+app.delete('/:id',async(req,res) => {
+  const id=req.params.id
+  // return res.send(id)
+  // checking if we have an item on the db with this id
+  try{
+    const genre=await Genres.findById(id)
+    if(!genre)return res.send("no genres found with this id")
+    //  DELETEING THE GENRES
+    await Genres.deleteOne({_id:id})
+    res.send('genre deleted')
+  }catch(e){
+    res.send({error:e.message})
+  }
+})
 
 // listening for changes
 
