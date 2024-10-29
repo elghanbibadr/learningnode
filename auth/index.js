@@ -3,6 +3,8 @@ const mongoose=require('mongoose')
 const app=express()
 
 const users=require("./routes/users")
+const auth=require("./routes/auth")
+
 app.use(express.json()); 
 
 const mongoURI = 'mongodb://localhost:27017/vidly'; // Use your MongoDB URI
@@ -20,6 +22,8 @@ const connectDB = async () => {
 
 
 app.use("/api/users",users)
+app.use("/api/auth",auth)
+
 
 
 
