@@ -4,8 +4,13 @@ const app=express()
 
 const users=require("./routes/users")
 const auth=require("./routes/auth")
+const config=require('config')
 
 app.use(express.json()); 
+if(!config.get('jwtPrivateKey')){
+  console.error('FATAL ERROR: jwt private key is not defined')
+  process.exit(1)
+}
 
 const mongoURI = 'mongodb://localhost:27017/vidly'; // Use your MongoDB URI
 
