@@ -5,6 +5,7 @@ const bcrypt=require('bcrypt')
 
 
 router.post("/", async (req, res) => {
+    // console.log("hello")
     const { name, email, password } = req.body;
   
     if (!email || !password) {
@@ -21,6 +22,8 @@ router.post("/", async (req, res) => {
       }
       user = new User({ name, email, password });
       await user.save()
+
+      return res.status(200).send("user successfully registered")
     
     } catch (e) {
       return res.status(404).send(e.message);
