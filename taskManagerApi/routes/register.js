@@ -1,34 +1,35 @@
-const express=require('express')
-const router=express.Router()
-const {User}=require('../models/models')
-const bcrypt=require('bcrypt')
-
+const express = require("express");
+const router = express.Router();
+const { User } = require("../models/models");
+const bcrypt = require("bcrypt");
+const jwt=require('jsonwebtoken') 
 
 router.post("/", async (req, res) => {
-    // console.log("hello")
-    const { name, email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).send("email and password are required");
-    }
-  
-    //  saving a new user
-    try {
-      //  check if a user with this email exists
-  
-      let user = await User.findOne({ email });
-      if (user) {
-        return res.status(400).send("User already registered !");
-      }
-      user = new User({ name, email, password });
-      await user.save()
+  let  { name, email, password } = req.body;
 
-      return res.status(200).send("user successfully registered")
-    
-    } catch (e) {
-      return res.status(404).send(e.message);
-    }
-  });
+  if (!email || !password) {
+    return res.status(400).send("email and password are required");
+  }
 
-  
-module.exports=router
+  //  saving a new user
+  try {
+    //  check if a user with this email exists
+
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).send("User already registered !");
+    }
+
+    // HASHING PASSWORDS
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+    user = new User({ name, email, password });
+    await user.save();
+
+    return res.status(200).send(user);
+  } catch (e) {
+    return res.status(404).send(e.message);
+  }
+});
+
+module.exports = router;
