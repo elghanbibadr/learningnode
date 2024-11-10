@@ -22,9 +22,14 @@ router.post("/", async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
     //  CHECKING IF USER PASSWORD CORRECT
     if (!isValidPassword)return res.status(400).send("Invalid Email or password");
-    // GENETARING JWT
-    const token= jwt.sign({_id:user._id},config.get('jwtPrivateKey'))
+  
+    // GENERATING JWT
+    const token= jwt.sign({_id:user._id},'jwtPrivateKey')
+
+    // SETTING THE RESPONSE HEADER
+    res.header('x-auth-token',token).send(token)
     return res.send(token);
+
   } catch (e) {
     return res.status(404).send(e.message);
   }

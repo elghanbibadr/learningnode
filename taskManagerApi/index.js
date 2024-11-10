@@ -6,10 +6,10 @@ const login = require("./routes/login");
 const { connectDB } = require("./db/db");
 const config = require("config");
 
-if (!config.get("jwtPrivateKey")) {
-  console.error("FATAL ERROR:jwt not defined");
-  process.exit(1);
-}
+// if (!config.get("jwtPrivateKey")) {
+//   console.error("FATAL ERROR:jwt not defined");
+//   process.exit(1);
+// }
 
 app.use(express.json());
 

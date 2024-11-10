@@ -26,7 +26,13 @@ router.post("/", async (req, res) => {
     user = new User({ name, email, password });
     await user.save();
 
-    return res.status(200).send(user);
+    // GENERATING JWT
+    const token= jwt.sign({_id:user._id},'jwtPrivateKey')
+
+    // SETTING THE RESPONSE HEADER
+    res.header('x-auth-token',token).send(token)
+    return res.send(token);
+
   } catch (e) {
     return res.status(404).send(e.message);
   }
