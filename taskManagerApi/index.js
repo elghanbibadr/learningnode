@@ -17,5 +17,7 @@ connectDB();
 
 app.use("/api/register", register);
 app.use("/api/login", login);
+app.use("/api/tasks", login);
+
 
 app.listen(3000, () => console.log(`Server is running on port 3000`));
