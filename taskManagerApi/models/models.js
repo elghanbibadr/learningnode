@@ -54,10 +54,15 @@ const tasksSchema=new mongoose.Schema({
         type: String,
         enum: ['pending', 'completed', 'in-progress', 'canceled'], // Another example enum for task status
         default: 'pending'
+      },
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
+        required: true
       }
 }) 
 
-const Tasks=mongoose.model("Task",tasksSchema)
+const Task=mongoose.model("Task",tasksSchema)
 
 
-module.exports={User}
+module.exports={User,Task}
